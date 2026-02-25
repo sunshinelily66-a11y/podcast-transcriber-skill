@@ -1,0 +1,5 @@
+interface:
+  display_name: "Podcast Transcriber"
+  short_description: "Transcribe podcasts locally with Whisper and optionally summarize in Chinese."
+  default_prompt: "Use $podcast-transcriber to transcribe a downloaded podcast audio file and optionally create a Chinese summary."
+
