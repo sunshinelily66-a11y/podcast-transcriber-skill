@@ -11,6 +11,7 @@ Local-first podcast transcription skill for Codex:
 - `SKILL.md`: Skill instructions and workflow
 - `scripts/check_env.ps1`: Environment checks (`python3`, `torch`, `ffmpeg`, `whisper`)
 - `scripts/transcribe_podcast.py`: Local Whisper transcription
+- `scripts/download_podcast.py`: Download latest episode from RSS or direct audio URL
 - `scripts/summarize_deepseek.py`: DeepSeek summary / highlights generation
 - `scripts/run_pipeline.py`: End-to-end pipeline
 - `references/`: Troubleshooting and output docs
@@ -43,6 +44,13 @@ python3 scripts/run_pipeline.py --input "..\\downloads\\episode.mp3" --model tin
 python3 scripts/summarize_deepseek.py --input "..\\transcripts\\episode.txt" --mode highlights
 ```
 
+5. Run directly from RSS feed URL or audio URL
+
+```powershell
+python3 scripts/run_pipeline.py --url "https://example.com/podcast/feed.xml" --model tiny --summarize
+python3 scripts/run_pipeline.py --url "https://cdn.example.com/episode.mp3" --model tiny
+```
+
 ## Outputs
 
 - Transcript: `transcripts/<audio-stem>.txt`
@@ -66,4 +74,3 @@ $env:PYTHONIOENCODING="utf-8"
 ```
 
 - Long episodes on CPU can take a long time. Start with `tiny` or `base`.
-

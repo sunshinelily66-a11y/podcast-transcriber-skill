@@ -11,6 +11,7 @@ Use this skill to run a local-first podcast transcription workflow.
 
 - `scripts/check_env.ps1`: Validate local environment (`python3`, `torch`, `ffmpeg`, `whisper`)
 - `scripts/transcribe_podcast.py`: Local Whisper transcription entrypoint
+- `scripts/download_podcast.py`: Download latest episode from RSS or download direct audio URL
 - `scripts/summarize_deepseek.py`: DeepSeek Chinese summary/highlights generator
 - `scripts/run_pipeline.py`: End-to-end pipeline (transcript + summary + highlights)
 - `references/whisper-troubleshooting.md`: Windows/Whisper runtime troubleshooting and fallback paths
@@ -51,6 +52,13 @@ python scripts/summarize_deepseek.py --input "..\transcripts\episode.txt" --mode
 python scripts/run_pipeline.py --input "..\downloads\episode.mp3" --model base --summarize
 ```
 
+6. Run pipeline directly from RSS or audio URL (minimal download support):
+
+```powershell
+python scripts/run_pipeline.py --url "https://example.com/podcast/feed.xml" --model tiny --summarize
+python scripts/run_pipeline.py --url "https://cdn.example.com/episode.mp3" --model tiny
+```
+
 `--summarize` now produces both:
 - `summaries/<stem>.md` (standard summary)
 - `highlights/<stem>.md` (Chinese essence summary)
@@ -81,6 +89,12 @@ python scripts/run_pipeline.py --input "..\downloads\episode.mp3" --model tiny -
 
 ```powershell
 python scripts/summarize_deepseek.py --input "..\transcripts\episode.txt" --mode highlights
+```
+
+### Download + transcribe from RSS feed URL
+
+```powershell
+python scripts/run_pipeline.py --url "https://example.com/feed.xml" --model tiny --summarize
 ```
 
 ## Files To Read On Demand
