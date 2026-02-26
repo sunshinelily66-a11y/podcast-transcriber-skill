@@ -14,6 +14,8 @@ Use this skill to run a local-first podcast transcription workflow.
 - `scripts/download_podcast.py`: Download latest episode from RSS or download direct audio URL
 - `scripts/summarize_deepseek.py`: DeepSeek Chinese summary/highlights generator
 - `scripts/run_pipeline.py`: End-to-end pipeline (transcript + summary + highlights)
+- `app.py`: Minimal Windows desktop GUI wrapper (Tkinter)
+- `build_exe.bat`: PyInstaller build helper for Windows `.exe`
 - `references/whisper-troubleshooting.md`: Windows/Whisper runtime troubleshooting and fallback paths
 - `references/deepseek-api.md`: DeepSeek request/response notes
 - `references/output-format.md`: Output file locations and conventions
@@ -71,6 +73,39 @@ python scripts/run_pipeline.py --url "https://cdn.example.com/episode.mp3" --mod
 - If local Whisper is too slow or unstable, read `references/whisper-troubleshooting.md` and switch to an alternative path.
 - For very long episodes on CPU, validate quality/speed with a short clip first, then process the full file.
 
+## URL Input Support (Minimal Downloader)
+
+`scripts/run_pipeline.py` supports two input modes:
+
+- `--input <local-audio-file>`: Use an existing local file
+- `--url <remote-source>`: Download first, then transcribe
+
+### Supported `--url` types
+
+- RSS 2.0 feed URL (uses latest episode with `<enclosure>`)
+- Atom feed URL (uses latest entry with `rel="enclosure"`)
+- Direct audio URL (e.g. `.mp3`, `.m4a`, `.wav`, `.aac`, `.ogg`)
+- Direct audio response URL without file extension (detected by `Content-Type: audio/*`)
+
+### `--url` behavior
+
+- Downloads audio into `downloads/` under the current working directory
+- Uses the latest file in `downloads/` as pipeline input after download succeeds
+- Then writes transcript to `transcripts/`
+- Then writes summary/highlights if requested
+
+### Current limitations (important)
+
+- Does **not** parse normal podcast episode webpages (HTML article pages)
+- Does **not** support authenticated/private feeds
+- Assumes "latest episode" means the first valid item returned by the feed
+- Minimal feed parsing only (common RSS/Atom podcast patterns)
+
+### Recommendation
+
+- If you only have a webpage URL, first find the feed URL or direct audio URL
+- If multiple episodes are needed, use your watcher (`main.py`) or call the downloader repeatedly
+
 ## Common Invocations
 
 ### Full episode, local transcription only
@@ -95,6 +130,12 @@ python scripts/summarize_deepseek.py --input "..\transcripts\episode.txt" --mode
 
 ```powershell
 python scripts/run_pipeline.py --url "https://example.com/feed.xml" --model tiny --summarize
+```
+
+### Download + transcribe from direct audio URL
+
+```powershell
+python scripts/run_pipeline.py --url "https://cdn.example.com/episode.mp3" --model tiny --summarize
 ```
 
 ## Files To Read On Demand

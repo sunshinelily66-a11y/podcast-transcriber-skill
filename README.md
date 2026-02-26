@@ -51,6 +51,29 @@ python3 scripts/run_pipeline.py --url "https://example.com/podcast/feed.xml" --m
 python3 scripts/run_pipeline.py --url "https://cdn.example.com/episode.mp3" --model tiny
 ```
 
+## Desktop App (Windows)
+
+This repository includes a minimal Tkinter GUI wrapper:
+
+```powershell
+python3 app.py
+```
+
+Features:
+- Select local audio file or paste RSS/audio URL
+- Choose Whisper model (`tiny/base/small`)
+- Run transcript / summary / highlights pipeline
+- View logs and open output folders
+
+### Build `.exe` (PyInstaller)
+
+```powershell
+build_exe.bat
+```
+
+Output:
+- `dist\PodcastTranscriber.exe`
+
 ## Outputs
 
 - Transcript: `transcripts/<audio-stem>.txt`
